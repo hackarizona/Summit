@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "express": "^4.13.4",
+    "gulp": "^3.9.1",
     "mongoose": "^4.4.20"
   },
   "devDependencies": {},
