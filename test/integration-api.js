@@ -1,5 +1,7 @@
 var request = require('supertest');
 
+// 	NEED TO BUILD A TEST DATABASE AND DROP THE
+//  DB AFTER EACH RUN IN ORDER TO AVOID IDEMPOTENT BEHAVIOR
 
 
 describe('can receive frontend index file', function () {

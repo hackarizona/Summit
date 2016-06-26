@@ -7,6 +7,7 @@ module.exports = {
     get: function(url, data) {
         return $.ajax({
             url: url,
+            contentType: 'application/json',
             data: data
         });
     },

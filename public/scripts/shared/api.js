@@ -1,14 +1,16 @@
 var server = "http://localhost:3000";
-var req = require('./ajax.js');
+var request = require('superagent');
 
 module.exports = {
 
-	getSources: function() {
-		var promise = req.get(server+'/sources');
-		return promise;
+	getConnections: function(callback) {
+		request
+		.get(server + '/connection')
+		.end(callback);
 	},
-	getSources: function(data) {
-		var promise = req.post(server+'/sources', data);
-		return promise;
+
+	createSources: function(data) {
+		// var promise = req.post(server+'/sources', data);
+		// return promise;
 	}
 };

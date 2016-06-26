@@ -11,8 +11,10 @@ var App = React.createClass({
 		return (
 	<div className="units-row units-padding">
 		<div className="unit-50">
+			<SourceForm />
 		</div>
 		<div className="unit-50">
+			<Sources />
 		</div>
 	</div>
 

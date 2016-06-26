@@ -22,21 +22,20 @@ var SourceStore = Reflux.createStore({
 	getInitialState: function() {
 		this.sources = [];
 		return this.sources;
+
 	},
 
 	fetch: function() {
-		var promise = api.getSources();
-		promise.success(function (json) {
-			var data = JSON.parse(json);
+		api.getConnections(function(err, resp) {
+		if (err) throw err;
+			var data = resp.body;
+			console.log(resp.body);
 			this.sources = data;
 			console.log("data");
 			console.log(data);
 			this.trigger(this.sources);
 		}.bind(this));
 
-		promise.error(function (err) {
-			console.error('error fetching list');
-		});
 	}
 });
 
