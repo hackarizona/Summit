@@ -41,7 +41,7 @@ app.route('/connections/:connection_id/form')
 			});
 	});
 
-app.route('/sources')
+app.route('/connection')
 	.get(function(request, response) {
 		var connections = Connection.find({}, function(err, connections) {
 			response.send(connections);
@@ -54,12 +54,16 @@ app.route('/sources')
 		connection.form_id = request.body.form_id;
 
 		connection.save(function(err) {
-			if (err) response.send(err);
-			response.json({message: 'Connection created successfully!', data: connection });
+			if (err) return response.status(400).send(err); // why does this have to return but the immediate response doesnt?
+				response
+				.status(201)
+				.json({message: 'Connection created successfully!', data: connection });
 		});
 	});
 
 
-app.listen(3000, function() {
+var server = app.listen(3000, function() {
 	console.log("Summit listening on port 3000");
 });
+
+module.exports = server;

@@ -31133,8 +31133,7 @@ var App = React.createClass({displayName: "App",
 		React.createElement("div", {className: "unit-50"}, 
 			React.createElement(SourceForm, null)
 		), 
-		React.createElement("div", {className: "unit-50"}, 
-			React.createElement(Sources, null)
+		React.createElement("div", {className: "unit-50"}
 		)
 	)
 
