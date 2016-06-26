@@ -7,7 +7,7 @@ var ConnectionSchema = new mongoose.Schema({
 		unique: true,
 		required: true,
 	},
-	form: {
+	form_id: {
 		type: String,
 		required: true
 	}

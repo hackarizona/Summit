@@ -31,6 +31,15 @@ app.route('/setup/typeform')
 	.get(setupController.newSource)
 	.post(setupController.createSource)
 
+app.route('/connections/:connection_id/form')
+	.get(function(request, response) {
+		var data = Connection.findById(request.params.connection_id, 
+			function(err, connection) {
+				if (err) response.send(err);
+
+				response.send(connection);
+			});
+	});
 
 app.route('/sources')
 	.get(function(request, response) {
@@ -42,7 +51,7 @@ app.route('/sources')
 	.post(function(request, response) {
 		var connection = new Connection();
 		connection.api_key = request.body.api_key;
-		connection.form = request.body.form;
+		connection.form_id = request.body.form_id;
 
 		connection.save(function(err) {
 			if (err) response.send(err);
