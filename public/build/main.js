@@ -32593,6 +32593,29 @@ module.exports = function(arr, fn, initial){
 
 var Reflux = require('reflux');
 
+var FormActions = Reflux.createActions([
+	'fetch',
+	'sendResponses'
+]);
+
+module.exports = FormActions;
+
+},{"reflux":185}],195:[function(require,module,exports){
+'use strict';
+
+var Reflux = require('reflux');
+
+var FormActions = Reflux.createActions([
+	'fetch',
+]);
+
+module.exports = FormActions;
+
+},{"reflux":185}],196:[function(require,module,exports){
+'use strict';
+
+var Reflux = require('reflux');
+
 var SourceActions = Reflux.createActions([
 	'fetch',
 	'submit',
@@ -32601,7 +32624,95 @@ var SourceActions = Reflux.createActions([
 
 module.exports = SourceActions;
 
-},{"reflux":185}],195:[function(require,module,exports){
+},{"reflux":185}],197:[function(require,module,exports){
+var React = require('react');
+var ReactDOM = require('react-dom');
+var ResponseActions = require('../actions/ResponseActions.js');
+var api = require('../shared/api');
+var ResponseStore = require('../stores/ResponseStore.js');
+var Reflux  = require('reflux');
+
+
+var DataTable = React.createClass({displayName: "DataTable",
+
+    mixins: [Reflux.connect(ResponseStore, 'responses')],
+
+    componentDidMount: function() {
+      console.log('form component rendered');
+      ResponseActions.fetch();
+    },
+
+    render: function() {
+        return (
+        React.createElement("table", {className: "table-hovered"}, 
+        React.createElement("thead", null, 
+          React.createElement("tr", null, 
+            React.createElement("th", null, "First Name"), 
+            React.createElement("th", null, "Last Name"), 
+            React.createElement("th", null, "School"), 
+            React.createElement("th", null, "Gender"), 
+            React.createElement("th", null, "Major")
+          )
+        ), 
+        React.createElement("tbody", null, 
+          this.state.responses.map(function(response) {
+            return (
+            React.createElement("tr", null, 
+              React.createElement("td", null, response.answers.textfield_13632184), 
+              React.createElement("td", null, response.answers.textfield_13632185), 
+              React.createElement("td", null, response.answers.textfield_13632159), 
+              React.createElement("td", null, response.answers.list_13632165_choice), 
+              React.createElement("td", null, response.answers.textarea_13632171)
+            )
+            )
+          })
+        )
+      )
+        );
+    }
+});
+
+module.exports = DataTable;
+
+
+/* 
+
+*/
+
+},{"../actions/ResponseActions.js":195,"../shared/api":202,"../stores/ResponseStore.js":204,"react":168,"react-dom":3,"reflux":185}],198:[function(require,module,exports){
+var React = require('react');
+var ReactDOM = require('react-dom');
+var FormActions = require('../actions/FormActions.js');
+var FormStore = require('../stores/FormStore');
+
+var api = require('../shared/api')
+var Reflux = require('reflux');
+
+var FieldPicker = React.createClass({displayName: "FieldPicker",
+
+    mixins: [Reflux.connect(FormStore, 'questions')],
+
+    componentDidMount: function() {
+      console.log('form component rendered');
+      FormActions.fetch();
+    },
+
+    render: function() {
+      return (
+        React.createElement("div", null, 
+        React.createElement("ul", null, 
+          this.state.questions.map(function(question) {
+            return React.createElement("li", null, question.question);
+          })
+        )
+        )
+      );
+    }
+});
+
+module.exports = FieldPicker;
+
+},{"../actions/FormActions.js":194,"../shared/api":202,"../stores/FormStore":203,"react":168,"react-dom":3,"reflux":185}],199:[function(require,module,exports){
 var React = require('react');
 var ReactDOM = require('react-dom');
 var SourceActions = require('../actions/SourceActions.js');
@@ -32643,7 +32754,7 @@ var SourceForm = React.createClass({displayName: "SourceForm",
 
 module.exports = SourceForm;
 
-},{"../actions/SourceActions.js":194,"react":168,"react-dom":3}],196:[function(require,module,exports){
+},{"../actions/SourceActions.js":196,"react":168,"react-dom":3}],200:[function(require,module,exports){
 var React = require('react');
 var $     = require('jquery');
 var ReactDOM  = require('react-dom');
@@ -32684,24 +32795,22 @@ var Sources = React.createClass({displayName: "Sources",
 
 module.exports = Sources;
 
-},{"../actions/SourceActions":194,"../stores/SourceStore":199,"jquery":2,"react":168,"react-dom":3,"reflux":185}],197:[function(require,module,exports){
+},{"../actions/SourceActions":196,"../stores/SourceStore":205,"jquery":2,"react":168,"react-dom":3,"reflux":185}],201:[function(require,module,exports){
 var React = require('react');
 var ReactDOM =  require('react-dom');
 
 var Sources = require('./components/Sources.react.js');
 var SourceForm = require('./components/SourceForm.react.js');
 
-
+var FieldPicker = require('./components/FieldPicker.react.js');
+var DataTable = require('./components/DataTable.react.js');
 
 var App = React.createClass({displayName: "App",
 	render: function() {
 		return (
 	React.createElement("div", {className: "units-row units-padding"}, 
-		React.createElement("div", {className: "unit-50"}, 
-			React.createElement(SourceForm, null)
-		), 
-		React.createElement("div", {className: "unit-50"}, 
-			React.createElement(Sources, null)
+		React.createElement("div", {className: "unit-100"}, 
+			React.createElement(DataTable, null)
 		)
 	)
 
@@ -32712,7 +32821,7 @@ var App = React.createClass({displayName: "App",
 
 ReactDOM.render(React.createElement(App, null), document.getElementById('app'));
 
-},{"./components/SourceForm.react.js":195,"./components/Sources.react.js":196,"react":168,"react-dom":3}],198:[function(require,module,exports){
+},{"./components/DataTable.react.js":197,"./components/FieldPicker.react.js":198,"./components/SourceForm.react.js":199,"./components/Sources.react.js":200,"react":168,"react-dom":3}],202:[function(require,module,exports){
 var server = "http://localhost:3000";
 var request = require('superagent');
 
@@ -32724,14 +32833,119 @@ module.exports = {
 		.end(callback);
 	},
 
-	createSources: function(data) {
-		// var promise = req.post(server+'/sources', data);
-		// return promise;
+	createConnection: function(data, callback) {
+		request
+		.post(server + '/connection')
+		.send(data)
+		.end(callback);
+	},
+
+	getTestForm: function(callback) {
+		request
+		.get(server + "/testform")
+		.end(callback);
 	}
 };
 
 
-},{"superagent":188}],199:[function(require,module,exports){
+},{"superagent":188}],203:[function(require,module,exports){
+var Reflux = require ('reflux');
+var React = require('react');
+var FormActions = require('../actions/FormActions');
+var api = require('../shared/api.js');
+
+
+var FormStore = Reflux.createStore({
+
+	listenables: [FormActions],
+
+	init: function() {
+		this.formData = [];
+		this.listenTo(FormActions.fetch, this.fetch);
+		console.log("source store init");
+
+	},
+
+	onSubmit: function(data) {
+		api.createConnection(data, function(err, resp) {
+		if (err) throw err;
+			var data = resp.body;
+			this.formData = data 
+
+		}.bind(this));
+	},
+
+	getInitialState: function() {
+		this.formData = [];
+		return this.formData;
+
+	},
+
+	fetch: function() {
+		api.getTestForm(function(err, resp) {
+		if (err) throw err;
+			var data = resp.body.questions;
+			this.formData = data;
+			console.log("data");
+			console.log(data);
+			this.trigger(this.formData);
+			FormActions.sendResponses(resp.body.response)
+		}.bind(this));
+
+	}
+});
+
+module.exports = FormStore;
+
+},{"../actions/FormActions":194,"../shared/api.js":202,"react":168,"reflux":185}],204:[function(require,module,exports){
+var Reflux = require ('reflux');
+var React = require('react');
+var ResponseActions = require('../actions/ResponseActions');
+var api = require('../shared/api.js');
+
+
+var ResponseStore = Reflux.createStore({
+
+	listenables: [ResponseActions],
+
+	init: function() {
+		this.formData = [];
+		this.listenTo(ResponseActions.fetch, this.fetch);
+		console.log("response store init");
+
+	},
+
+	onSubmit: function(data) {
+		api.createConnection(data, function(err, resp) {
+		if (err) throw err;
+			var data = resp.body;
+			this.formData = data 
+
+		}.bind(this));
+	},
+
+	getInitialState: function() {
+		this.formData = [];
+		return this.formData;
+
+	},
+
+	fetch: function() {
+		api.getTestForm(function(err, resp) {
+		if (err) throw err;
+			var data = resp.body.responses;
+			this.formData = data;
+			console.log("data");
+			console.log(data);
+			this.trigger(this.formData);
+		}.bind(this));
+
+	}
+});
+
+module.exports = ResponseStore;
+
+},{"../actions/ResponseActions":195,"../shared/api.js":202,"react":168,"reflux":185}],205:[function(require,module,exports){
 var Reflux = require ('reflux');
 var React = require('react');
 var SourceActions = require('../actions/SourceActions');
@@ -32750,7 +32964,13 @@ var SourceStore = Reflux.createStore({
 	},
 
 	onSubmit: function(data) {
-		console.log(api.createSource(data));
+		api.createConnection(data, function(err, resp) {
+		if (err) throw err;
+			var data = resp.body;
+			
+			this.sources = data 
+
+		}.bind(this));
 	},
 
 	getInitialState: function() {
@@ -32775,4 +32995,4 @@ var SourceStore = Reflux.createStore({
 
 module.exports = SourceStore;
 
-},{"../actions/SourceActions":194,"../shared/api.js":198,"react":168,"reflux":185}]},{},[197])
+},{"../actions/SourceActions":196,"../shared/api.js":202,"react":168,"reflux":185}]},{},[201])

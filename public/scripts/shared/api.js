@@ -9,8 +9,16 @@ module.exports = {
 		.end(callback);
 	},
 
-	createSources: function(data) {
-		// var promise = req.post(server+'/sources', data);
-		// return promise;
+	createConnection: function(data, callback) {
+		request
+		.post(server + '/connection')
+		.send(data)
+		.end(callback);
+	},
+
+	getTestForm: function(callback) {
+		request
+		.get(server + "/testform")
+		.end(callback);
 	}
 };

@@ -1,16 +1,16 @@
 var Reflux = require ('reflux');
 var React = require('react');
-var SourceActions = require('../actions/SourceActions');
+var FormActions = require('../actions/FormActions');
 var api = require('../shared/api.js');
 
 
-var SourceStore = Reflux.createStore({
+var FormStore = Reflux.createStore({
 
-	listenables: [SourceActions],
+	listenables: [FormActions],
 
 	init: function() {
-		this.sources = [];
-		this.listenTo(SourceActions.fetch, this.fetch);
+		this.formData = [];
+		this.listenTo(FormActions.fetch, this.fetch);
 		console.log("source store init");
 
 	},
@@ -19,30 +19,29 @@ var SourceStore = Reflux.createStore({
 		api.createConnection(data, function(err, resp) {
 		if (err) throw err;
 			var data = resp.body;
-			
-			this.sources = data 
+			this.formData = data 
 
 		}.bind(this));
 	},
 
 	getInitialState: function() {
-		this.sources = [];
-		return this.sources;
+		this.formData = [];
+		return this.formData;
 
 	},
 
 	fetch: function() {
-		api.getConnections(function(err, resp) {
+		api.getTestForm(function(err, resp) {
 		if (err) throw err;
-			var data = resp.body;
-			console.log(resp.body);
-			this.sources = data;
+			var data = resp.body.questions;
+			this.formData = data;
 			console.log("data");
 			console.log(data);
-			this.trigger(this.sources);
+			this.trigger(this.formData);
+			FormActions.sendResponses(resp.body.response)
 		}.bind(this));
 
 	}
 });
 
-module.exports = SourceStore;
+module.exports = FormStore;

@@ -4,7 +4,6 @@ var bcrypt = require('bcrypt-nodejs');
 var ConnectionSchema = new mongoose.Schema({
 	api_key: {
 		type: String,
-		unique: false,
 		required: true,
 	},
 	form_id: {
